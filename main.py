@@ -43,17 +43,12 @@ def create_dwg_files():
 
     # Create Bill of Materials files
     if sections["Bill of Materials"] > 0:
-        bom_filename = f"{project_number}-__1.dwg"
-        bom_path = os.path.join(project_folder, bom_filename)
-        shutil.copy(template_path, bom_path)
-        created_files.append(bom_filename)
-
-        # Generate additional Bill of Materials pages if needed
-        for i in range(1, sections["Bill of Materials"]):
-            extra_bom_filename = f"{project_number}-__{i+1}.dwg"
-            extra_bom_path = os.path.join(project_folder, extra_bom_filename)
-            shutil.copy(template_path, extra_bom_path)
-            created_files.append(extra_bom_filename)
+        for i in range(sections["Bill of Materials"]):
+            bom_suffix = f"__{i+1}"
+            bom_filename = f"{project_number}-{bom_suffix}.dwg"
+            bom_path = os.path.join(project_folder, bom_filename)
+            shutil.copy(template_path, bom_path)
+            created_files.append(bom_filename)
 
     # Generate DWG files for other sections
     for section, count in sections.items():
@@ -70,7 +65,7 @@ def create_dwg_files():
         for file in created_files:
             wdp_file.write(file + "\n")
 
-    lbl_status.config(text="DWG files and WDP updated successfully!", fg="green")
+    lbl_status.config(text="DWG files created successfully!", fg="green")
 
 # Tkinter GUI
 root = tk.Tk()
